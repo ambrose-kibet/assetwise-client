@@ -1,38 +1,78 @@
-@tailwind base;
-@layer base {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-bold;
-    @apply font-title;
-    @apply leading-5;
-  }
-  h1 {
-    @apply text-5xl;
-  }
-  h2 {
-    @apply text-4xl;
-  }
-  h3 {
-    @apply text-3xl;
-  }
-  h4 {
-    @apply text-2xl;
-  }
-  h5 {
-    @apply text-xl;
-  }
-  h6 {
-    @apply text-lg;
-  }
-  body {
-    @apply font-sans;
-    @apply leading-7;
-    @apply bg-green-50;
-  }
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:400|Yeseva+One:400');
+*,
+::after,
+::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-@tailwind components;
-@tailwind utilities;
+
+html {
+  font-size: 100%;
+} /*16px*/
+
+:root {
+  --green-50: #d8f3dc;
+  --green-100: #b7e4c7;
+  --green-200: #95d5b2;
+  --green-300: #74c69d;
+  --green-400: #52b788;
+  --green-500: #40916c;
+  --green-600: #2d6a4f;
+  --green-700: #1b4332;
+  --green-800: #081c15;
+
+  --orange: #ffb703;
+  --blue: #023047;
+
+  --max-width: 1200px;
+  --primary-color: #f5f5f5;
+}
+body {
+  background: white;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.75;
+  color: #000000;
+}
+
+p {
+  margin-bottom: 0.5rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 3rem 0.5rem;
+  font-family: 'Yeseva One', sans-serif;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 3.052rem;
+}
+
+h2 {
+  font-size: 2.441rem;
+}
+
+h3 {
+  font-size: 1.953rem;
+}
+
+h4 {
+  font-size: 1.563rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+small,
+.text_small {
+  font-size: 0.8rem;
+}
