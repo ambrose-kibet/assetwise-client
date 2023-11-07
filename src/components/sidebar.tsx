@@ -1,10 +1,10 @@
-import logo from '../assets/logo.svg';
 import { FaTimes } from 'react-icons/fa';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { closeSidebar } from '../redux/features/nav/navSlice';
 import PropertiesAcordion from './PropertiesAcordion';
 import { Link } from 'react-router-dom';
+import LogoComponent from './LogoComponent';
 const Sidebar = () => {
   const { isSidebarOpen } = useAppSelector((state: RootState) => state.nav);
   const dispatch = useAppDispatch();
@@ -12,10 +12,7 @@ const Sidebar = () => {
   return (
     <aside className={isSidebarOpen ? 'sidebar show-sidebar' : 'sidebar'}>
       <div className="sidebar-header">
-        <div className="logo-container">
-          <img src={logo} alt="logo" height={'100%'} />
-        </div>
-
+        <LogoComponent />
         <button
           onClick={() => dispatch(closeSidebar())}
           className="close-sidebar"
@@ -25,8 +22,18 @@ const Sidebar = () => {
       </div>
       <div className="sidebar-body">
         <PropertiesAcordion />
-        <Link to={'/about'}>About</Link>
-        <Link to="gggd"> Blog</Link>
+        <Link to={'/about'} onClick={() => dispatch(closeSidebar())}>
+          {' '}
+          About Us
+        </Link>
+        <Link to={'/blog'} onClick={() => dispatch(closeSidebar())}>
+          {' '}
+          Blog{' '}
+        </Link>
+        <Link to={'/contact'} onClick={() => dispatch(closeSidebar())}>
+          {' '}
+          Contact Us{' '}
+        </Link>
       </div>
       <div className="sidebar-footer"></div>
     </aside>

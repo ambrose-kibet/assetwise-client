@@ -70,7 +70,12 @@ const ContactForm = () => {
           value={subject}
         />
       </div>
-      <FormTextArea value={message} handleChange={handleChanges} />
+      <FormTextArea
+        value={message}
+        handleChange={handleChanges}
+        placeholder="Your Message"
+        name="message"
+      />
       <button type="submit" className="button">
         Send Message
         <span className="button-icon contact-button-icon">

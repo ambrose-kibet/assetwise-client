@@ -1,18 +1,43 @@
 import styled from 'styled-components';
 import { BiImageAdd } from 'react-icons/bi';
 import { FaPlus } from 'react-icons/fa';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { formats, modules } from '../utils/constants';
+
+import { FaFeatherAlt } from 'react-icons/fa';
+import FormTextArea from '../components/FormTextArea';
+import FormInputComponent from '../components/FormInputComponent';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { handleChange } from '../redux/features/blog/blogSlice';
+import SelectComponent from '../components/SelectComponent';
+import { categories } from '../utils/data';
+import RichTextEditor from '../components/RichTextEditor';
+
 const WriteBlog = () => {
+  const dispatch = useAppDispatch();
+  const {
+    blogContent: {
+      category,
+      content,
+      coverImage,
+      description,
+      status,
+      tags,
+      title,
+    },
+    isEditing,
+  } = useAppSelector((state: RootState) => state.blog);
+  const handleChanges = ({ name, value }: { name: string; value: string }) => {
+    dispatch(handleChange({ name, value }));
+  };
+
   return (
     <WriteBlogContainer>
       <div className="container">
         <h2 className="section-title">
-          Write <span>Story</span>
+          {isEditing ? 'Edit' : 'Write'} <span>Story</span>
         </h2>
         <div className="coverimage-container">
-          <img src="" alt="" />
+          <img src={coverImage} alt="" />
         </div>
         <div className="form-container">
           <form>
@@ -25,7 +50,7 @@ const WriteBlog = () => {
               </label>
               <input
                 type="file"
-                name="avatar"
+                name="coverImage"
                 id="coverImage"
                 style={{ display: 'none' }}
               />
@@ -40,51 +65,64 @@ const WriteBlog = () => {
                 type="text"
                 className="form-control"
                 placeholder="Enter Title"
+                name="title"
+                value={title}
+                onChange={(e) =>
+                  handleChanges({ name: 'title', value: e.target.value })
+                }
               />
             </div>
             <div className="form-group">
               <label htmlFor="title">Description</label>
-              <textarea
-                className="form-control"
-                placeholder=" Add a short description..."
-              ></textarea>
+              <FormTextArea
+                name="description"
+                placeholder="Add a short description..."
+                value={description}
+                handleChange={handleChanges}
+              />
             </div>
-            <div className="form-group">
-              <label htmlFor="title">Content</label>
-              <ReactQuill
-                theme="snow"
-                modules={modules}
-                formats={formats}
-                className="quill"
-                placeholder="Tell us your story..."
-              ></ReactQuill>
-            </div>
+            <RichTextEditor content={content} handleChanges={handleChanges} />
 
             <div className="form-group">
               <label htmlFor="title">Category</label>
-              <select className="form-control">
-                <option value="1">Category 1</option>
-                <option value="2">Category 2</option>
-                <option value="3">Category 3</option>
-              </select>
+              <SelectComponent
+                name="category"
+                options={categories}
+                value={category}
+                handleChange={handleChanges}
+              />
             </div>
             <div className="form-group">
               <label htmlFor="title">Tags</label>
-              <input type="text" className="form-control" placeholder="#rent" />
-            </div>
-            <div className="form-group">
-              <label htmlFor="title">Date</label>
-              <input type="date" className="form-control" />
+              <FormInputComponent
+                type="text"
+                placeholder="#rent"
+                name="tags"
+                value={tags}
+                handleChange={handleChanges}
+              />
             </div>
             <div className="form-group">
               <label htmlFor="title">Status</label>
-              <select className="form-control">
-                <option value="1">Draft</option>
-                <option value="2">Published</option>
+              <select
+                className="form-control"
+                name="status"
+                value={status}
+                onChange={(e) =>
+                  handleChanges({ name: 'status', value: e.target.value })
+                }
+              >
+                <option value="draft">Draft</option>
+                <option value="publish">Publish</option>
               </select>
             </div>
             <div className="form-group">
-              <button className="btn btn-primary">Submit</button>
+              <button className="button">
+                Publish Story
+                <span className="button-icon ">
+                  <FaFeatherAlt />
+                </span>
+              </button>
             </div>
           </form>
         </div>
@@ -95,6 +133,9 @@ const WriteBlog = () => {
 export default WriteBlog;
 
 const WriteBlogContainer = styled.div`
+  .container {
+    padding: 0 10px;
+  }
   .coverimage-container {
     height: 300px;
     width: 100%;
