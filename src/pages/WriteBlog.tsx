@@ -1,19 +1,28 @@
 import styled from 'styled-components';
 import { BiImageAdd } from 'react-icons/bi';
-import { FaPlus } from 'react-icons/fa';
+import { FaPen, FaPlus } from 'react-icons/fa';
 
 import { FaFeatherAlt } from 'react-icons/fa';
 import FormTextArea from '../components/FormTextArea';
 import FormInputComponent from '../components/FormInputComponent';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { handleChange } from '../redux/features/blog/blogSlice';
+import {
+  createBlog,
+  handleChange,
+  uploadImage,
+} from '../redux/features/blog/blogSlice';
 import SelectComponent from '../components/SelectComponent';
-import { categories } from '../utils/data';
 import RichTextEditor from '../components/RichTextEditor';
+import Loading from '../components/spinnner';
+import { toast } from 'react-toastify';
+import { useEffect, useRef } from 'react';
+import { getCategories } from '../redux/features/blog/categorySlice';
+import CheckBoxInput from '../components/CheckBoxInput';
 
 const WriteBlog = () => {
   const dispatch = useAppDispatch();
+  const titleRef = useRef<HTMLInputElement>(null);
   const {
     blogContent: {
       category,
@@ -23,13 +32,105 @@ const WriteBlog = () => {
       status,
       tags,
       title,
+      featured,
     },
     isEditing,
+    isLoading,
   } = useAppSelector((state: RootState) => state.blog);
-  const handleChanges = ({ name, value }: { name: string; value: string }) => {
-    dispatch(handleChange({ name, value }));
+  const { categories } = useAppSelector((state: RootState) => state.category);
+  const handleChanges = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    if (name === 'featured') {
+      dispatch(
+        handleChange({
+          name,
+          value: (event.target as HTMLInputElement).checked,
+        })
+      );
+
+      return;
+    }
+    dispatch(handleChange({ name, value: value as string }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target;
+    if (input) {
+      const file = input.files?.[0];
+      if (!file) {
+        return;
+      } else if (!/^image\//.test(file.type)) {
+        toast.error('You could only upload images.');
+      } else if (file.size > 1024 * 1024) {
+        toast.error('Image size must be less than 1 MB.');
+      } else {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          dispatch(
+            handleChange({ name: 'coverImage', value: reader.result as string })
+          );
+        };
+        dispatch(uploadImage(file));
+      }
+    }
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (
+      !title ||
+      !description ||
+      !content ||
+      !category ||
+      !tags ||
+      !status ||
+      !coverImage
+    ) {
+      return toast.error('Please fill all the fields');
+    } else if (title.length < 6) {
+      return toast.error('Title must be at least 6 characters long.');
+    } else if (description.length < 30) {
+      return toast.error('Description must be at least 30 characters long.');
+    } else if (content.length < 10) {
+      return toast.error('Content must be at least 10 characters long.');
+    } else if (tags.length < 3) {
+      return toast.error('Tags must be at least 3 characters long.');
+    } else if (!/#/.test(tags.trim())) {
+      return toast.error(
+        'Tags must be separated by a space and preceded by #.'
+      );
+    } else {
+      if (isEditing) {
+        // dispatch(updateBlog({ title, description, content, tags, category, status }));
+      } else {
+        dispatch(
+          createBlog({
+            title,
+            description,
+            content,
+            tags,
+            category,
+            status,
+            coverImage,
+            featured,
+          })
+        );
+      }
+    }
+  };
+  useEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.focus();
+    }
+  }, []);
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
   return (
     <WriteBlogContainer>
       <div className="container">
@@ -38,9 +139,10 @@ const WriteBlog = () => {
         </h2>
         <div className="coverimage-container">
           <img src={coverImage} alt="" />
+          {isLoading && <Loading />}
         </div>
         <div className="form-container">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="image-container">
               <label htmlFor="coverImage" className="custom-file-label">
                 <span className="upload-icon">
@@ -52,6 +154,7 @@ const WriteBlog = () => {
                 type="file"
                 name="coverImage"
                 id="coverImage"
+                onChange={handleImageChange}
                 style={{ display: 'none' }}
               />
             </div>
@@ -67,9 +170,8 @@ const WriteBlog = () => {
                 placeholder="Enter Title"
                 name="title"
                 value={title}
-                onChange={(e) =>
-                  handleChanges({ name: 'title', value: e.target.value })
-                }
+                ref={titleRef}
+                onChange={(e) => handleChanges(e)}
               />
             </div>
             <div className="form-group">
@@ -109,18 +211,23 @@ const WriteBlog = () => {
                 name="status"
                 value={status}
                 onChange={(e) =>
-                  handleChanges({ name: 'status', value: e.target.value })
+                  handleChanges(e as React.ChangeEvent<HTMLSelectElement>)
                 }
               >
                 <option value="draft">Draft</option>
                 <option value="publish">Publish</option>
               </select>
             </div>
+            <CheckBoxInput
+              handleChange={handleChanges}
+              name="featured"
+              value={featured}
+            />
             <div className="form-group">
-              <button className="button">
-                Publish Story
+              <button className="button" type="submit">
+                {isEditing ? 'Edit' : ' Publish '}Story
                 <span className="button-icon ">
-                  <FaFeatherAlt />
+                  {isEditing ? <FaPen /> : <FaFeatherAlt />}
                 </span>
               </button>
             </div>
@@ -140,11 +247,19 @@ const WriteBlogContainer = styled.div`
     height: 300px;
     width: 100%;
     margin-bottom: 20px;
+    position: relative;
     img {
       width: 100%;
       border-radius: 5px;
       height: 100%;
       object-fit: cover;
+    }
+    div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 99;
     }
   }
   .form-container {
@@ -172,6 +287,9 @@ const WriteBlogContainer = styled.div`
             min-height: 150px;
           }
         }
+      }
+      .check-container {
+        margin-right: auto;
       }
       .title-container {
         display: flex;
