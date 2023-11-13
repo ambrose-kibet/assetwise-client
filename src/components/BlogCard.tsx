@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 type Props = {
-  id: number;
+  _id: string;
   coverImage: string;
   title: string;
   description: string;
@@ -14,12 +14,12 @@ const BlogCard = (props: Props) => {
         <img src={props.coverImage} alt="cover image" />
       </div>
       <div className="card-body">
-        <h3>{props.title}</h3>
+        <h4>{props.title}</h4>
       </div>
       <div className="card-footer">
         <p>
           {props.description.substring(0, 30)}
-          <Link to={`/blog/${props.id}`}> Read More</Link>...
+          <Link to={`/blog/${props._id}`}> Read More</Link>...
         </p>
       </div>
     </BlogCardContainer>
@@ -51,10 +51,10 @@ const BlogCardContainer = styled.article`
     }
   }
   .card-body {
-    h3 {
-      color: var(--orange);
+    h4 {
       margin: 0.25rem 0;
-      text-align: center;
+      text-transform: capitalize;
+      text-align: left !important;
     }
   }
   .card-footer {
