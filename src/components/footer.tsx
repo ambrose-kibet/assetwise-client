@@ -39,13 +39,15 @@ const FooterContainer = styled.footer`
   width: 100vw;
   display: flex;
   justify-content: center;
+  background: var(--clr-white);
+  margin-top: 2rem;
   div {
     width: 100%;
     max-width: var(--max-width);
     display: grid;
     grid-template-columns: 1fr;
     max-width: var(--max-width);
-    padding: 1rem;
+    padding: 0.5rem;
     gap: 1rem;
     margin-left: auto;
     margin-right: auto;
