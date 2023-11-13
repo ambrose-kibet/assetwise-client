@@ -58,6 +58,7 @@ const Nav = styled.nav`
   height: fit-content;
   overflow: hidden;
   z-index: 99;
+  background: var(--clr-white);
 
   .container {
     display: flex;
