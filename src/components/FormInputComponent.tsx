@@ -2,7 +2,7 @@ type Props = {
   type: string;
   placeholder: string;
   value: string;
-  handleChange: ({ name, value }: { name: string; value: string }) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
 };
 const FormInputComponent = ({
@@ -20,9 +20,7 @@ const FormInputComponent = ({
         placeholder={placeholder}
         className="form-control"
         value={value}
-        onChange={(e) =>
-          handleChange({ name: e.target.name, value: e.target.value })
-        }
+        onChange={(e) => handleChange(e)}
       />
     </div>
   );
