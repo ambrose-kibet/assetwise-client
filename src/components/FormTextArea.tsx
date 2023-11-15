@@ -2,7 +2,7 @@ type Props = {
   value: string;
   name: string;
   placeholder: string;
-  handleChange: ({ name, value }: { name: string; value: string }) => void;
+  handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
 const FormTextArea = ({ value, handleChange, name, placeholder }: Props) => {
   return (
@@ -12,9 +12,7 @@ const FormTextArea = ({ value, handleChange, name, placeholder }: Props) => {
         name={name}
         value={value}
         className="form-control textarea"
-        onChange={(e) =>
-          handleChange({ name: e.target.name, value: e.target.value })
-        }
+        onChange={(e) => handleChange(e)}
       ></textarea>
     </div>
   );
