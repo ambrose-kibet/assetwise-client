@@ -16,7 +16,12 @@ const ContactForm = () => {
   );
 
   const dispatch = useAppDispatch();
-  const handleChanges = ({ name, value }: { name: string; value: string }) => {
+  const handleChanges = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
     dispatch(handleChange({ name, value }));
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
