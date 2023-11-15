@@ -1,12 +1,20 @@
 import styled from 'styled-components';
-import { featuredBlogs } from '../utils/data';
 import BlogCard from './BlogCard';
-const FeaturedBlogs = () => {
+import { RootState } from '../redux/store';
+import { useAppSelector } from '../redux/hooks';
+import Loading from './spinnner';
+
+const FeaturedBlogs = ({ flagId }: { flagId?: string }) => {
+  const { posts, isLoading } = useAppSelector((state: RootState) => state.blog);
+
   return (
-    <FeaturedContainer>
-      {featuredBlogs.map((blog) => (
-        <BlogCard key={blog.id} {...blog} />
-      ))}
+    <FeaturedContainer className="featured-blogs">
+      {(isLoading && <Loading />) ||
+        posts
+          .filter((blog) => blog.featured === true)
+          .filter((blog) => blog._id !== flagId)
+          .slice(0, 3)
+          .map((blog) => <BlogCard key={blog._id} {...blog} />)}
     </FeaturedContainer>
   );
 };
@@ -18,6 +26,6 @@ const FeaturedContainer = styled.div`
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0.25rem;
+  padding: 0.25rem 0;
   gap: 1rem;
 `;
