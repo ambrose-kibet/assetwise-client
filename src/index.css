@@ -23,9 +23,12 @@ html {
   --green-800: #081c15;
   --clr-white: #fff;
   --orange: #ffb703;
+  --light-orange: #fcbf49;
+  --blue-100: #89c2d9;
   --blue-500: #01497c;
   --blue-600: #013a63;
   --blue-700: #023047;
+  --color-gray: gray;
 
   --shadow-1: 0 5px 15px rgba(0, 0, 0, 0.1);
   --shadow-2: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -254,17 +257,15 @@ main {
 /* landing */
 
 .hero {
-  width: 100%;
+  min-width: 100%;
   max-width: 1600px;
-  margin: 0 auto;
+  margin-inline: auto;
   height: calc(100vh - 6rem);
   overflow: hidden;
-  position: relative;
-  background-image: url(assets/img2.jpg);
+  background-image: url(assets/img6.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -272,16 +273,14 @@ main {
 }
 @keyframes change {
   0% {
-    background-image: url(assets/img2.jpg);
-  }
-  33% {
-    background-image: url(assets/img6.jpg);
-  }
-  66% {
     background-image: url(assets/img4.jpg);
   }
+  50% {
+    background-image: url(assets/img6.jpg);
+  }
+
   100% {
-    background-image: url(assets/img2.jpg);
+    background-image: url(assets/img4.jpg);
   }
 }
 
