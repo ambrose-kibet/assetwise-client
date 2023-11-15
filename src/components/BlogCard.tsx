@@ -45,6 +45,7 @@ const BlogCardContainer = styled.article`
     img {
       width: 100%;
       height: 100%;
+      max-height: 250px;
       object-fit: cover;
       border-radius: var(--radius);
       margin: 0 auto;
