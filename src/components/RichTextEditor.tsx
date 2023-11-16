@@ -5,7 +5,7 @@ import { useMemo, useRef } from 'react';
 import { imageupload } from '../utils/constants';
 type Props = {
   content: string;
-  handleChanges: ({ value, name }: { name: string; value: string }) => void;
+  handleChanges: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 const RichTextEditor = ({ content, handleChanges }: Props) => {
   const quillRef = useRef();
@@ -43,14 +43,17 @@ const RichTextEditor = ({ content, handleChanges }: Props) => {
       toolbar: {
         container: [
           [{ header: [1, 2, 3, 4, 5, 6, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
+          ['bold', 'italic', 'underline', 'strike', 'clean'],
           [
             { list: 'ordered' },
             { list: 'bullet' },
             { indent: '-1' },
             { indent: '+1' },
+            {
+              align: ['center', 'right', 'justify'],
+            },
           ],
-          ['image', 'link'],
+          ['image', 'video', 'link'],
           [
             {
               color: [
@@ -110,7 +113,11 @@ const RichTextEditor = ({ content, handleChanges }: Props) => {
         placeholder="Tell us your story..."
         value={content}
         ref={quillRef as unknown as React.RefObject<ReactQuill>}
-        onChange={(value) => handleChanges({ name: 'content', value })}
+        onChange={(value) =>
+          handleChanges({
+            target: { name: 'content', value },
+          } as unknown as React.ChangeEvent<HTMLInputElement>)
+        }
       />
     </div>
   );
