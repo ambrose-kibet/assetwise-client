@@ -6,6 +6,7 @@ import { counties, propertyCategories, propertyTypes } from '../utils/data';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import CheckBoxInput from './CheckBoxInput';
 import {
+  addProperty,
   handleInput,
   removeAmenity,
   uploadImages,
@@ -31,7 +32,10 @@ const AddPropertyForm = () => {
       acreage,
       amenity,
       amenities,
+      images,
     },
+    isEditing,
+    isLoading,
   } = useAppSelector((state) => state.property);
   const dispatch = useAppDispatch();
   const handleChange = (
@@ -80,8 +84,62 @@ const AddPropertyForm = () => {
       dispatch(uploadImages(Array.from(files)));
     }
   };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isLoading) return;
+    if (
+      !title ||
+      !adress ||
+      !town ||
+      !county ||
+      !description ||
+      !type ||
+      !price ||
+      !category ||
+      !amenities?.length
+    ) {
+      return toast.error(
+        'Please fill in title, description,  price, adress, town, county, type, category and amenities fields'
+      );
+    }
+    if (category === 'residential' && (!bedrooms || !bathrooms)) {
+      return toast.error('Please fill bedrooms and bathrooms fields');
+    }
+    if (category !== 'land' && !area) {
+      return toast.error('Please fill area field');
+    }
+    if (category !== 'commercial' && !acreage) {
+      return toast.error('Please fill acreage field');
+    }
+    if (!images || !images.length) {
+      return toast.error('Please upload at least 3 images of the property');
+    }
+    if (isEditing) {
+      // dispatch(editProperty())
+    } else {
+      dispatch(
+        addProperty({
+          adress,
+          town,
+          county,
+          description,
+          featured,
+          price,
+          title,
+          type,
+          category,
+          bedrooms,
+          bathrooms,
+          area,
+          acreage,
+          amenities,
+          images,
+        })
+      );
+    }
+  };
   return (
-    <AddPropertyContainer action="">
+    <AddPropertyContainer onSubmit={handleSubmit}>
       <div className="group-one">
         <div className="form-group">
           <label htmlFor="title">Title</label>
@@ -253,7 +311,7 @@ const AddPropertyForm = () => {
       </div>
       <div className="form-group">
         <label htmlFor="title">Images</label>
-        {/* incae of eviting  hide this then display a different one for
+        {/* incase of editing  hide this then display a different one for
          displaying all images for that property and option to add more */}
         <input
           type="file"
@@ -265,7 +323,7 @@ const AddPropertyForm = () => {
           onChange={handleImageChange}
         />
       </div>
-      <button type="submit" className="button">
+      <button type="submit" className="button" disabled={isLoading}>
         Create Property{' '}
         <span className="button-icon">
           <FaPen />
