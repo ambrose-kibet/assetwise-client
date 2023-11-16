@@ -3,6 +3,9 @@ import { AiFillEye } from 'react-icons/ai';
 import { BsPencilSquare } from 'react-icons/bs';
 import { FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { setFlagId, setIsEditing } from '../redux/features/blog/blogSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { openModal } from '../redux/features/nav/navSlice';
 type Props = {
   _id: string;
   coverImage: string;
@@ -11,6 +14,8 @@ type Props = {
 };
 
 const MySingleStoryComponent = ({ _id, coverImage, title }: Props) => {
+  const dispatch = useAppDispatch();
+
   return (
     <MySingleStoryComponentContainer>
       <div className="img-container">
@@ -22,14 +27,24 @@ const MySingleStoryComponent = ({ _id, coverImage, title }: Props) => {
           <Link to={`/blog/${_id}`}>
             <AiFillEye />
           </Link>
-          <Link to={'/admin/blog'}>
+          <Link
+            to={`/admin/blog?editId=${_id}`}
+            onClick={() => dispatch(setIsEditing(true))}
+          >
             <BsPencilSquare />
           </Link>
-          <button type="button">
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(openModal());
+              dispatch(setFlagId(_id));
+            }}
+          >
             <FaTrash />
           </button>
         </div>
       </div>
+      {}
     </MySingleStoryComponentContainer>
   );
 };
@@ -65,14 +80,22 @@ const MySingleStoryComponentContainer = styled.article`
       display: flex;
       justify-content: space-between;
       align-items: center;
+      a,
       button {
         border: none;
         background: transparent;
         font-size: 1.5rem;
         color: var(--blue-700);
+
         cursor: pointer;
         &:hover {
           color: var(--blue-700);
+        }
+      }
+      button {
+        color: red;
+        &:hover {
+          color: var(--orange);
         }
       }
     }
@@ -81,7 +104,7 @@ const MySingleStoryComponentContainer = styled.article`
     grid-template-columns: 1fr 1fr;
     align-items: flex-start;
     .img-container {
-      height: 100%;
+      height: 150px;
     }
     .body-container {
       padding: 1rem;
