@@ -3,75 +3,88 @@ import styled from 'styled-components';
 import { MdBedroomChild } from 'react-icons/md';
 import { FaBath } from 'react-icons/fa';
 import { GiIsland } from 'react-icons/gi';
+import { TProperty, altImage } from '../redux/features/property/propertySlice';
+import { formatPrice } from '../utils/utils';
 
-type Props = {
-  id: number;
-  image: string;
-  price: number;
-  address: string;
-  county: string;
-  town: string;
-  bedrooms?: number;
-  bathrooms?: number;
-  acreage: number;
-  amenities?: string[];
-};
-const FeaturedCard = (props: Props) => {
+const FeaturedCard = ({
+  images,
+  adress,
+  price,
+  county,
+  town,
+  amenities,
+  acreage,
+  bedrooms,
+  bathrooms,
+  category,
+  title,
+  type,
+  _id,
+}: Partial<TProperty>) => {
   return (
     <FeaturedContainer>
       <div className="card-image">
-        <img src={props.image} alt="featured property" />
+        <img src={(images as altImage)[0].url} alt="featured property" />
       </div>
       <div className="card-content">
-        <h3>{props.address}</h3>
+        <h3>{title}</h3>
         <div className="info-container">
           <p>
-            <span className="label">Kes:</span>
-            {props.price}
+            <span className="label">adress:</span>
+            {adress}
+          </p>
+          <p>
+            {formatPrice(price!)} {type === 'rent' && '/mo'}
           </p>
           <p>
             <span className="label">County:</span>
-            {props.county}
+            {county}
           </p>
           <p>
             <span className="label">City/Town:</span>
-            {props.town}
+            {town}
           </p>
-          {props.amenities && (
+          <p>
+            <span className="label">Type</span>
+            {category}
+          </p>
+          {amenities && (
             <p className="amenities">
               <span className="label">Ammenities:</span>
-              {props.amenities?.map((item, index) => (
+              {amenities?.map((item, index) => (
                 <span key={index}>{item}, </span>
               ))}
             </p>
           )}
         </div>
         <div className="items-container">
-          <p>
-            <span className="label icon">
-              <GiIsland />
-            </span>
-            {props.acreage}
-          </p>
-          {props.bedrooms && (
+          {acreage && (
+            <p>
+              <span className="label icon">
+                <GiIsland />
+              </span>
+              {acreage} (acres)
+            </p>
+          )}
+          {bedrooms && (
             <p>
               <span className="label icon">
                 <MdBedroomChild />
               </span>
-              {props.bedrooms}
+              {bedrooms}
             </p>
           )}
-          {props.bathrooms && (
+          {bathrooms && (
             <p>
               <span className="label icon">
                 <FaBath />
               </span>
-              {props.bathrooms}
+              {bathrooms}
             </p>
           )}
         </div>
 
-        <Link to={`/properties/${props.id.toString()}`}>View Property</Link>
+        <Link to={`/properties/${_id!}`}>View Property</Link>
       </div>
     </FeaturedContainer>
   );
