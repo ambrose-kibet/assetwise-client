@@ -1,10 +1,20 @@
 import Slider from 'react-slick';
 import styled from 'styled-components';
-import { featuredProperties } from '../utils/data';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import FeaturedCard from './FeaturedCard';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useEffect } from 'react';
+import {
+  TProperty,
+  getFeaturedProperties,
+} from '../redux/features/property/propertySlice';
+import Loading from './spinnner';
 const FeaturedProperties = () => {
+  const dispatch = useAppDispatch();
+  const { featuredProperties, isLoading } = useAppSelector(
+    (state) => state.property
+  );
   const settings = {
     dots: true,
     infinite: true,
@@ -13,13 +23,18 @@ const FeaturedProperties = () => {
     slidesToScroll: 1,
     adaptiveHeight: true,
   };
+  useEffect(() => {
+    dispatch(getFeaturedProperties());
+  }, [dispatch]);
   return (
     <FeaturedContainer>
-      <Slider {...settings}>
-        {featuredProperties.map((property) => (
-          <FeaturedCard key={property.id} {...property} />
-        ))}
-      </Slider>
+      {(isLoading && <Loading />) || (
+        <Slider {...settings}>
+          {featuredProperties.map((property: Partial<TProperty>) => (
+            <FeaturedCard key={property._id} {...property} />
+          ))}
+        </Slider>
+      )}
     </FeaturedContainer>
   );
 };
