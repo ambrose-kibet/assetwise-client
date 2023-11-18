@@ -9,7 +9,10 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
   createBlog,
+  getSingleBlog,
   handleChange,
+  setIsEditing,
+  updateBlog,
   uploadImage,
 } from '../redux/features/blog/blogSlice';
 import SelectComponent from '../components/SelectComponent';
@@ -19,10 +22,14 @@ import { toast } from 'react-toastify';
 import { useEffect, useRef } from 'react';
 import { getCategories } from '../redux/features/blog/categorySlice';
 import CheckBoxInput from '../components/CheckBoxInput';
+import { useSearchParams } from 'react-router-dom';
 
 const WriteBlog = () => {
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const titleRef = useRef<HTMLInputElement>(null);
+  const editId = searchParams.get('editId');
+
   const {
     blogContent: {
       category,
@@ -100,13 +107,27 @@ const WriteBlog = () => {
       return toast.error('Content must be at least 10 characters long.');
     } else if (tags.length < 3) {
       return toast.error('Tags must be at least 3 characters long.');
-    } else if (!/#/.test(tags.trim())) {
+    } else if (!tags.startsWith('#')) {
       return toast.error(
-        'Tags must be separated by a space and preceded by #.'
+        'Tags must  start with # and separated by a space and preceded by #.'
       );
     } else {
       if (isEditing) {
-        // dispatch(updateBlog({ title, description, content, tags, category, status }));
+        console.log(tags);
+
+        dispatch(
+          updateBlog({
+            _id: editId || '',
+            title,
+            description,
+            content,
+            tags,
+            category,
+            status,
+            coverImage,
+            featured,
+          })
+        );
       } else {
         dispatch(
           createBlog({
@@ -124,12 +145,16 @@ const WriteBlog = () => {
     }
   };
   useEffect(() => {
+    if (editId) {
+      dispatch(setIsEditing(true));
+      dispatch(getSingleBlog(editId));
+    }
+  }, [dispatch, editId]);
+  useEffect(() => {
+    dispatch(getCategories());
     if (titleRef.current) {
       titleRef.current.focus();
     }
-  }, []);
-  useEffect(() => {
-    dispatch(getCategories());
   }, [dispatch]);
   return (
     <WriteBlogContainer>

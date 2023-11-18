@@ -6,8 +6,16 @@ import { Link } from 'react-router-dom';
 import FeaturedProperties from '../components/FeaturedProperties';
 import { FaArrowRight } from 'react-icons/fa';
 import FeaturedBlogs from '../components/FeaturedBlogs';
+import { getPosts } from '../redux/features/blog/blogSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { useEffect } from 'react';
 
 const Landingpage = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
+
   return (
     <LandingContainer>
       <div className="hero">
@@ -16,6 +24,7 @@ const Landingpage = () => {
           <h3>Companions in your real estate journey </h3>
         </div>
       </div>
+
       <div className="cards-container">
         <Link to="/properties?category=residential" className="card">
           <div className="card-img">
@@ -68,7 +77,7 @@ const Landingpage = () => {
         <div className="underline"></div>
         <FeaturedProperties />
       </div>
-      <div className="featured-container">
+      <div className="featured-container variant">
         <h3>Insights</h3>
         <div className="underline"></div>
         <FeaturedBlogs />
@@ -85,8 +94,6 @@ const Landingpage = () => {
 export default Landingpage;
 
 const LandingContainer = styled.section`
-  display: grid;
-  grid-template-columns: 1fr;
   .content {
     display: flex;
     flex-direction: column;
@@ -94,10 +101,17 @@ const LandingContainer = styled.section`
     align-items: center;
     color: white;
     max-width: 600px;
+    margin-inline: auto;
+    h1,
+    h3 {
+      text-align: center;
+      margin: 0.25rem 0;
+      color: var(--clr-white);
+    }
   }
   .cards-container {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 1rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -108,6 +122,7 @@ const LandingContainer = styled.section`
     .card {
       display: grid;
       grid-template-columns: 1fr;
+      width: 100%;
       padding: 0.25rem;
       background-color: var(--clr-white);
       border-radius: var(--radius);
@@ -119,14 +134,16 @@ const LandingContainer = styled.section`
       }
       .card-content {
         h3 {
-          color: var(--orange);
+          color: var(--blue-700);
           margin: 0.25rem 0;
+          margin-bottom: 0;
         }
         p {
           color: var(--blue-700);
         }
       }
       .card-img {
+        width: 100%;
         img {
           width: 100%;
           object-fit: cover;
@@ -146,8 +163,9 @@ const LandingContainer = styled.section`
     align-items: center;
     .about-content {
       h3 {
-        color: var(--orange);
+        color: var(--blue-700);
         margin: 0.25rem 0;
+        margin-bottom: 0;
         text-align: center;
       }
       p {
@@ -180,19 +198,27 @@ const LandingContainer = styled.section`
     align-items: center;
 
     h3 {
-      color: var(--orange);
+      color: var(--blue-700);
       margin: 0.25rem 0;
       text-align: center;
+      margin-bottom: 0;
     }
     .veiw-all {
       text-decoration: none;
       text-transform: capitalize;
       width: fit-content;
     }
+    .featured-blogs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    }
   }
-  @media screen and (min-width: 640px) {
+  .variant {
+    grid-template-columns: 1fr;
+  }
+  @media screen and (min-width: 700px) {
     .cards-container {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     }
     .about-section {
       grid-template-columns: 1fr 1fr;

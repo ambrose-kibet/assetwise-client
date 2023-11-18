@@ -4,6 +4,7 @@ const initialState = {
   isSubLinksOpen: false,
   position: 0,
   isSidebarOpen: false,
+  isModalOpen: false,
 };
 
 const navSlice = createSlice({
@@ -23,9 +24,21 @@ const navSlice = createSlice({
     closeSidebar: (state) => {
       state.isSidebarOpen = false;
     },
+    openModal: (state) => {
+      state.isModalOpen = true;
+    },
+    closeModal: (state) => {
+      state.isModalOpen = false;
+    },
   },
 });
 
-export const { openSublinks, closeSublinks, openSidebar, closeSidebar } =
-  navSlice.actions;
+export const {
+  openSublinks,
+  closeSublinks,
+  openSidebar,
+  closeSidebar,
+  openModal,
+  closeModal,
+} = navSlice.actions;
 export default navSlice.reducer;

@@ -40,37 +40,66 @@ export const featuredProperties = [
     amenities: ['beach', 'lake'],
   },
 ];
-export const featuredBlogs = [
-  {
-    id: 1,
-    title: 'Blog 1',
-    coverImage: image1,
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus
-        recusandae ducimus dolorem minima quibusdam esse iure dolor qui magni
-        minus atque placeat cumque deleniti et distinctio, explicabo laudantium
-        asperiores quae cupiditate possimus ab provident, pariatur nostrum.
-        Soluta vero fugiat iure?`,
-  },
-  {
-    id: 2,
-    title: 'Blog 2',
-    coverImage: image3,
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus
-        recusandae ducimus dolorem minima quibusdam esse iure dolor qui magni
-        minus atque placeat cumque deleniti et distinctio, explicabo laudantium
-        asperiores quae cupiditate possimus ab provident, pariatur nostrum.
-        Soluta vero fugiat iure?`,
-  },
-  {
-    id: 3,
-    title: 'Blog 3',
-    coverImage: image4,
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus
-        recusandae ducimus dolorem minima quibusdam esse iure dolor qui magni
-        minus atque placeat cumque deleniti et distinctio, explicabo laudantium
-        asperiores quae cupiditate possimus ab provident, pariatur nostrum.
-        Soluta vero fugiat iure?`,
-  },
+
+export const propertyTypes = [
+  { _id: 'buy', name: 'buy' },
+  { _id: 'rent', name: 'rent' },
+];
+export const propertyCategories = [
+  { _id: 'residential', name: 'residential' },
+  { _id: 'commercial', name: 'commercial' },
+  { _id: 'aparment', name: 'apartment' },
+  { _id: 'land', name: 'land' },
+];
+
+export const counties = [
+  { _id: 'Mombasa', name: 'Mombasa' },
+  { _id: 'Kwale', name: 'Kwale' },
+  { _id: 'Kilifi', name: 'Kilifi' },
+  { _id: 'TanaRiver', name: 'Tana River' },
+  { _id: 'Lamu', name: 'Lamu' },
+  { _id: 'TaitaTaveta', name: 'Taita-Taveta' },
+  { _id: 'Garissa', name: 'Garissa' },
+  { _id: 'Wajir', name: 'Wajir' },
+  { _id: 'Mandera', name: 'Mandera' },
+  { _id: 'Marsabit', name: 'Marsabit' },
+  { _id: 'Isiolo', name: 'Isiolo' },
+  { _id: 'Meru', name: 'Meru' },
+  { _id: 'TharakaNithi', name: 'Tharaka-Nithi' },
+  { _id: 'Embu', name: 'Embu' },
+  { _id: 'Kitui', name: 'Kitui' },
+  { _id: 'Machakos', name: 'Machakos' },
+  { _id: 'Makueni', name: 'Makueni' },
+  { _id: 'Nyandarua', name: 'Nyandarua' },
+  { _id: 'Nyeri', name: 'Nyeri' },
+  { _id: 'Kirinyaga', name: 'Kirinyaga' },
+  { _id: 'Muranga', name: 'Murang’a' },
+  { _id: 'Kiambu', name: 'Kiambu' },
+  { _id: 'Turkana', name: 'Turkana' },
+  { _id: 'WestPokot', name: 'West Pokot' },
+  { _id: 'Samburu', name: 'Samburu' },
+  { _id: 'TransNzoia', name: 'Trans Nzoia' },
+  { _id: 'UasinGishu', name: 'Uasin Gishu' },
+  { _id: 'ElgeyoMarakwet', name: 'Elgeyo-Marakwet' },
+  { _id: 'Nandi', name: 'Nandi' },
+  { _id: 'Baringo', name: 'Baringo' },
+  { _id: 'Laikipia', name: 'Laikipia' },
+  { _id: 'Nakuru', name: 'Nakuru' },
+  { _id: 'Narok', name: 'Narok' },
+  { _id: 'Kajiado', name: 'Kajiado' },
+  { _id: 'Kericho', name: 'Kericho' },
+  { _id: 'Bomet', name: 'Bomet' },
+  { _id: 'Kakamega', name: 'Kakamega' },
+  { _id: 'Vihiga', name: 'Vihiga' },
+  { _id: 'Bungoma', name: 'Bungoma' },
+  { _id: 'Busia', name: 'Busia' },
+  { _id: 'Siaya', name: 'Siaya' },
+  { _id: 'Kisumu', name: 'Kisumu' },
+  { _id: 'HomaBay', name: 'Homa Bay' },
+  { _id: 'Migori', name: 'Migori' },
+  { _id: 'Kisii', name: 'Kisii' },
+  { _id: 'Nyamira', name: 'Nyamira' },
+  { _id: 'Nairobi', name: 'Nairobi' },
 ];
 
 export const people = [
@@ -90,12 +119,6 @@ export const people = [
     description:
       'Successful career working with property managers as an auditor, a CPA and software developer.',
   },
-];
-
-export const categories = [
-  { name: 'Land', id: '1' },
-  { name: 'For Sale', id: '2' },
-  { name: 'For Rent', id: '3' },
 ];
 
 export const statuses = [

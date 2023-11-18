@@ -189,12 +189,13 @@ const authSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-
+        removeFromLocalStorage('auth-user');
         state.user = payload;
       })
       .addCase(logoutUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.user = null;
+        removeFromLocalStorage('auth-user');
         toast.error(payload as string);
       });
   },

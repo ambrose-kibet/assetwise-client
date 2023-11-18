@@ -22,3 +22,10 @@ export const imageupload = async (image: File) => {
     toast.error('Something went wrong');
   }
 };
+export const formatPrice = (price: number) => {
+  const newNumber = Intl.NumberFormat('en-Us', {
+    style: 'currency',
+    currency: 'kes',
+  }).format(price);
+  return newNumber;
+};
