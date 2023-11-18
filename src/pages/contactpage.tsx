@@ -70,6 +70,7 @@ const ContactContainer = styled.section`
   .contact-container {
     grid-template-columns: 4fr 8fr;
     align-items: center;
+    padding: 0 0.5rem;
   }
 
   .contact-title {
