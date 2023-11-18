@@ -102,13 +102,16 @@ const AddPropertyForm = () => {
         'Please fill in title, description,  price, adress, town, county, type, category and amenities fields'
       );
     }
-    if (category === 'residential' && (!bedrooms || !bathrooms)) {
+    if (
+      (category === 'residential' && (!bedrooms || !bathrooms)) ||
+      (category === 'apartment' && (!bedrooms || !bathrooms))
+    ) {
       return toast.error('Please fill bedrooms and bathrooms fields');
     }
     if (category !== 'land' && !area) {
       return toast.error('Please fill area field');
     }
-    if (category !== 'commercial' && !acreage) {
+    if (category === 'land' && !acreage) {
       return toast.error('Please fill acreage field');
     }
     if (!images || !images.length) {
