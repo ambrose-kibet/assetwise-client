@@ -52,7 +52,10 @@ const FeaturedCard = ({
             <p className="amenities">
               <span className="label">Ammenities:</span>
               {amenities?.map((item, index) => (
-                <span key={index}>{item}, </span>
+                <span key={index}>
+                  {item}
+                  {index !== amenities!.length - 1 && ','}
+                </span>
               ))}
             </p>
           )}
