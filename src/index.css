@@ -327,6 +327,25 @@ main {
   text-align: center;
   line-height: 60px;
 }
+.btn-blue {
+  color: var(--blue-700);
+  border: 1px solid var(--blue-700);
+  transition: var(--transition);
+}
+.btn-blue:hover {
+  background-color: var(--blue-700);
+  color: var(--clr-white);
+}
+.btn-blue:hover::before {
+  background-color: var(--clr-white);
+}
+.btn-blue .button-icon {
+  background-color: var(--blue-700);
+}
+.btn-blue .button-icon {
+  background-color: var(--blue-700);
+}
+
 /* form input */
 .form-input-group {
   grid-template-columns: repeat(2, 1fr);
