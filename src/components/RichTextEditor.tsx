@@ -2,7 +2,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { toast } from 'react-toastify';
 import { useMemo, useRef } from 'react';
-import { imageupload } from '../utils/constants';
+import { imageupload } from '../utils/utils';
 type Props = {
   content: string;
   handleChanges: (e: React.ChangeEvent<HTMLInputElement>) => void;
