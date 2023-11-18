@@ -196,7 +196,31 @@ export const getAllProperties = createAsyncThunk(
     }
   }
 );
-
+export const getSingeProperty = createAsyncThunk(
+  'property/getSingleProperty',
+  async (id: string, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await customAxios.get(`/properties/${id}`);
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ msg: string }, unknown>;
+        if (axiosError.response) {
+          if (axiosError.response.status === 401) {
+            dispatch(logoutUser());
+            return rejectWithValue('Unauthorized Logging you out...');
+          }
+          return rejectWithValue(axiosError.response.data.msg);
+        } else if (axiosError.request) {
+          return rejectWithValue('No response received');
+        } else {
+          return rejectWithValue('Network error');
+        }
+      }
+      return rejectWithValue('Something went wrong');
+    }
+  }
+);
 const propertySlice = createSlice({
   name: 'property',
   initialState,
@@ -292,6 +316,20 @@ const propertySlice = createSlice({
         state.properties = payload.data;
       })
       .addCase(getAllProperties.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload as string, {
+          position: 'top-center',
+        });
+      });
+    builder
+      .addCase(getSingeProperty.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingeProperty.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.selectedProperty = payload.data;
+      })
+      .addCase(getSingeProperty.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload as string, {
           position: 'top-center',
