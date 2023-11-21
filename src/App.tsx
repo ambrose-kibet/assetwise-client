@@ -14,6 +14,9 @@ import {
   ProtectedPages,
   MyBlogs,
   AddProperty,
+  UserLayout,
+  AdminProtectedPages,
+  ProfilePage,
 } from './pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,17 +36,31 @@ function App() {
           <Route path="/contact" element={<Contactpage />} />
           <Route path="/blog" element={<Blogpage />} />
           <Route path="/blog/:id" element={<SingleBlog />} />
+
           <Route
-            path="/admin"
+            path="/dashboard"
             element={
               <ProtectedPages>
-                <AdminLayout />
+                <UserLayout />
               </ProtectedPages>
             }
           >
-            <Route path="/admin/addproperty" element={<AddProperty />} />
-            <Route path="/admin/myblogs" element={<MyBlogs />} />
-            <Route path="/admin/blog" element={<WriteBlog />} />
+            <Route index element={<ProfilePage />} />
+            <Route
+              path="/dashboard/admin"
+              element={
+                <AdminProtectedPages>
+                  <AdminLayout />
+                </AdminProtectedPages>
+              }
+            >
+              <Route
+                path="/dashboard/admin/addproperty"
+                element={<AddProperty />}
+              />
+              <Route path="/dashboard/admin/myblogs" element={<MyBlogs />} />
+              <Route path="/dashboard/admin/blog" element={<WriteBlog />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<ErrorPage />} />
