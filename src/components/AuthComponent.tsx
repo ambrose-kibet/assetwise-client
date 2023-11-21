@@ -68,7 +68,7 @@ const AuthComponent = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/admin/blog');
+      navigate('/dashboard/');
     }
   }, [user, navigate]);
   return (

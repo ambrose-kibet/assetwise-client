@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   closeSublinks,
   openSidebar,
@@ -9,14 +9,21 @@ import {
 } from '../redux/features/nav/navSlice';
 import { FaBars } from 'react-icons/fa';
 import LogoComponent from './LogoComponent';
+import { RootState } from '../redux/store';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-
+  const { user } = useAppSelector((state: RootState) => state.auth);
   const showMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const link = e.target as HTMLAnchorElement;
+
     const posY = link.getBoundingClientRect().bottom;
-    dispatch(openSublinks(posY - 3));
+    dispatch(
+      openSublinks({
+        position: posY - 3,
+        content: (link.textContent?.toLowerCase() as string).trim(),
+      })
+    );
   };
   const handleRemove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const item = e.target as HTMLElement;
@@ -31,6 +38,10 @@ const Navbar = () => {
         <LogoComponent />
         <div className="nav-links" onMouseOver={showMenu}>
           <p className="drop-down">Properties</p>
+          {(user && user.role === 'admin' && (
+            <p className="drop-down">Dashboard</p>
+          )) ||
+            null}
           <Link to={'/about'}>About</Link>
           <Link to={'/blog'}>Blog</Link>
         </div>

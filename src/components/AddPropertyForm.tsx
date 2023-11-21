@@ -2,17 +2,26 @@ import styled from 'styled-components';
 import InputComponent from './InputComponent';
 import FormTextArea from './FormTextArea';
 import SelectComponent from './SelectComponent';
-import { counties, propertyCategories, propertyTypes } from '../utils/data';
+import {
+  counties,
+  propertyCategories,
+  propertyTypes,
+  statusOptions,
+} from '../utils/data';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import CheckBoxInput from './CheckBoxInput';
 import {
+  addImages,
   addProperty,
+  altImage,
+  editproperty,
   handleInput,
   removeAmenity,
   uploadImages,
 } from '../redux/features/property/propertySlice';
 import { FaPen, FaPlus, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import EditImages from './EditImages';
 
 const AddPropertyForm = () => {
   const {
@@ -33,9 +42,11 @@ const AddPropertyForm = () => {
       amenity,
       amenities,
       images,
+      status,
     },
     isEditing,
     isLoading,
+    flagId,
   } = useAppSelector((state) => state.property);
   const dispatch = useAppDispatch();
   const handleChange = (
@@ -72,14 +83,21 @@ const AddPropertyForm = () => {
       if (files.length > 5) {
         return toast.error('You could only upload 5 images.');
       }
-      if (files.length < 3) {
+      if (files.length < 3 && !isEditing) {
         return toast.error('Please provide at least 3 images of the property');
+      }
+      if (isEditing && files.length < 1) {
+        return toast.error('Please provide at least 1 image of the property');
       }
       if (listfiles.some((file) => file.size > 1024 * 1024)) {
         return toast.error('Image size should not be more than 1mb');
       }
       if (listfiles.some((file) => !file.type.startsWith('image'))) {
         return toast.error('You could only upload images.');
+      }
+      if (isEditing) {
+        dispatch(addImages({ images: Array.from(files), propertyId: flagId! }));
+        return;
       }
       dispatch(uploadImages(Array.from(files)));
     }
@@ -114,11 +132,32 @@ const AddPropertyForm = () => {
     if (category === 'land' && !acreage) {
       return toast.error('Please fill acreage field');
     }
-    if (!images || !images.length) {
+    if (!images || images.length < 3) {
       return toast.error('Please upload at least 3 images of the property');
     }
     if (isEditing) {
-      // dispatch(editProperty())
+      dispatch(
+        editproperty({
+          property: {
+            adress,
+            town,
+            county,
+            description,
+            featured,
+            price: Number(price),
+            title,
+            type,
+            category,
+            bedrooms: Number(bedrooms),
+            bathrooms: Number(bathrooms),
+            area: Number(area),
+            acreage: Number(acreage),
+            amenities,
+            status,
+          },
+          propertyId: flagId!,
+        })
+      );
     } else {
       dispatch(
         addProperty({
@@ -183,6 +222,17 @@ const AddPropertyForm = () => {
             handleChange={handleChange}
           />
         </div>
+        {isEditing && (
+          <div className="form-group">
+            <label htmlFor="title">Status</label>
+            <SelectComponent
+              name="status"
+              options={statusOptions}
+              value={status!}
+              handleChange={handleChange}
+            />
+          </div>
+        )}
         <div className="form-group">
           <CheckBoxInput
             name="featured"
@@ -299,35 +349,43 @@ const AddPropertyForm = () => {
           </button>
         </div>
         <div className="amenities">
-          {amenities!.map((amenity, index) => (
-            <span key={index} className="amenity">
-              {amenity}
-              <button
-                type="button"
-                onClick={() => dispatch(removeAmenity(amenity))}
-              >
-                <FaTimes />
-              </button>
-            </span>
-          ))}
+          {amenities!.length &&
+            amenities!.map((amenity, index) => (
+              <span key={index} className="amenity">
+                {amenity}
+                <button
+                  type="button"
+                  onClick={() => dispatch(removeAmenity(amenity))}
+                >
+                  <FaTimes />
+                </button>
+              </span>
+            ))}
         </div>
       </div>
-      <div className="form-group">
-        <label htmlFor="title">Images</label>
-        {/* incase of editing  hide this then display a different one for
-         displaying all images for that property and option to add more */}
-        <input
-          type="file"
-          placeholder="Please provide at least 3 images of the property"
-          className=""
-          multiple
-          min={3}
-          max={5}
-          onChange={handleImageChange}
+      {(isEditing && (
+        <EditImages
+          images={images as altImage}
+          handleChange={handleImageChange}
         />
-      </div>
+      )) || (
+        <div className="form-group">
+          <label htmlFor="title">Images</label>
+          {/* incase of editing  hide this then display a different one for
+         displaying all images for that property and option to add more */}
+          <input
+            type="file"
+            placeholder="Please provide at least 3 images of the property"
+            className=""
+            multiple
+            min={3}
+            max={5}
+            onChange={handleImageChange}
+          />
+        </div>
+      )}
       <button type="submit" className="button" disabled={isLoading}>
-        Create Property{' '}
+        {isEditing ? 'Edit' : 'Create'} Property
         <span className="button-icon">
           <FaPen />
         </span>

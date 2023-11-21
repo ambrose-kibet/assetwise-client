@@ -89,7 +89,7 @@ const SingleProperty = () => {
                     <div className="info-detail">
                       <p>Price</p>
                       <span>
-                        {formatPrice(selectedProperty.price)}{' '}
+                        {formatPrice(selectedProperty.price)}
                         {selectedProperty.type === 'rent' && '/Mo'}
                       </span>
                     </div>
@@ -125,7 +125,7 @@ const SingleProperty = () => {
                 <div className="info-detail">
                   <p>Amenities</p>
                   {selectedProperty.amenities?.map((amenity, index) => (
-                    <span>
+                    <span key={index}>
                       {amenity}
                       {index !== selectedProperty.amenities!.length - 1 && ','}
                     </span>

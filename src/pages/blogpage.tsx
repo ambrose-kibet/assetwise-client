@@ -36,11 +36,11 @@ const Blogpage = () => {
         {posts.length > 3 && (
           <div className="cover-stories">
             <div className="left-stories">
-              <SingleStory {...second} />
-              <SingleStory {...third} />
+              {second && <SingleStory {...second} />}
+              {third && <SingleStory {...third} />}
             </div>
             <div className="main-story">
-              <SingleStory {...first} />
+              {first && <SingleStory {...first} />}
             </div>
           </div>
         )}

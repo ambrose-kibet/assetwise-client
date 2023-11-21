@@ -28,7 +28,7 @@ const MySingleStoryComponent = ({ _id, coverImage, title }: Props) => {
             <AiFillEye />
           </Link>
           <Link
-            to={`/admin/blog?editId=${_id}`}
+            to={`/dashboard/admin/blog?editId=${_id}`}
             onClick={() => dispatch(setIsEditing(true))}
           >
             <BsPencilSquare />

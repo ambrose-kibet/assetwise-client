@@ -42,8 +42,6 @@ const PropertiesComponent = () => {
         (price !== 0 ? `,price<=${price}` : '') +
         (acreage !== 0 ? `,acreage<=${acreage}` : '');
 
-      console.log(price, acreage, bathrooms, bedrooms, filterUrl);
-
       dispatch(getAllProperties(filterUrl));
     }, 900);
 

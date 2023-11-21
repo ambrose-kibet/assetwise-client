@@ -48,7 +48,7 @@ const FeaturedCard = ({
             <span className="label">Type</span>
             {category}
           </p>
-          {amenities && (
+          {(amenities && (
             <p className="amenities">
               <span className="label">Ammenities:</span>
               {amenities?.map((item, index) => (
@@ -58,33 +58,37 @@ const FeaturedCard = ({
                 </span>
               ))}
             </p>
-          )}
+          )) ||
+            null}
         </div>
         <div className="items-container">
-          {acreage && (
+          {(acreage && (
             <p>
               <span className="label icon">
                 <GiIsland />
               </span>
               {acreage} (acres)
             </p>
-          )}
-          {bedrooms && (
+          )) ||
+            null}
+          {(bedrooms && (
             <p>
               <span className="label icon">
                 <MdBedroomChild />
               </span>
               {bedrooms}
             </p>
-          )}
-          {bathrooms && (
+          )) ||
+            null}
+          {(bathrooms && (
             <p>
               <span className="label icon">
                 <FaBath />
               </span>
               {bathrooms}
             </p>
-          )}
+          )) ||
+            null}
         </div>
 
         <Link to={`/properties/${_id!}`}>View Property</Link>

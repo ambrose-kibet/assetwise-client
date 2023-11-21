@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAppSelector } from '../redux/hooks';
+import { logoutUser } from '../redux/features/auth/authSlice';
+import { useDispatch } from 'react-redux';
+import { AnyAction } from '@reduxjs/toolkit';
 
 const Footer = () => {
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logoutUser() as unknown as AnyAction);
+  };
+
   return (
     <FooterContainer>
       <div>
@@ -29,6 +39,16 @@ const Footer = () => {
           <Link to={'/blog'}> Insights </Link>
           <Link to={'/contact'}> Contact Us </Link>
         </ul>
+        <ul>
+          <h5>{user ? 'My Account' : 'Useful Links'} </h5>
+          {!user && <Link to={'/auth'}> Login/Register</Link>}
+          {user && <Link to={'/dashboard'}>Profile </Link>}
+          {user && (
+            <button type="button" onClick={handleLogout}>
+              Log out
+            </button>
+          )}
+        </ul>
       </div>
     </FooterContainer>
   );
@@ -55,6 +75,7 @@ const FooterContainer = styled.footer`
       display: grid;
       grid-template-columns: 1fr;
       h5 {
+        margin-top: 0.25rem;
         margin-bottom: 0.25rem;
         color: var(--orange);
       }
@@ -62,6 +83,19 @@ const FooterContainer = styled.footer`
       a {
         text-decoration: none;
         color: var(--blue-700);
+      }
+      button {
+        background: transparent;
+        border: none;
+        color: var(--blue-700);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        span {
+          font-size: 1rem;
+          margin-left: 0.5rem;
+        }
       }
     }
   }

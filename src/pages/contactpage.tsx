@@ -1,4 +1,4 @@
-import { FaAngellist, FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaTwitter, FaFacebook, FaInstagram, FaTiktok } from 'react-icons/fa';
 import ContactForm from '../components/ContactForm';
 import styled from 'styled-components';
 import { people } from '../utils/data';
@@ -25,28 +25,28 @@ const ContactPage = () => {
 
           <div className="contact-socials">
             <a
-              href="https://github.com/ambrose-kibet"
+              href="https://facebook.com/"
               className="contact-social-link"
               target="_blank"
               rel="noreferrer"
             >
-              <FaGithub />
+              <FaFacebook />
             </a>
             <a
-              href="https://www.linkedin.com/in/ambrose-kibet/"
+              href="https://www.instagram.com/"
               className="contact-social-link"
               target="_blank"
               rel="noreferrer"
             >
-              <FaLinkedin />
+              <FaInstagram />
             </a>
             <a
-              href="https://wellfound.com/u/ambrosekibet"
+              href="https://tiktok.com/"
               className="contact-social-link"
               target="_blank"
               rel="noreferrer"
             >
-              <FaAngellist />
+              <FaTiktok />
             </a>
             <a
               href="https://twitter.com/ambrose_kibet"

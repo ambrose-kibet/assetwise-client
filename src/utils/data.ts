@@ -51,6 +51,70 @@ export const propertyCategories = [
   { _id: 'aparment', name: 'apartment' },
   { _id: 'land', name: 'land' },
 ];
+export const bedroomFilters = [
+  {
+    _id: 'all',
+    name: 'All',
+  },
+  {
+    _id: '1',
+    name: '1',
+  },
+  {
+    _id: '2',
+    name: '2',
+  },
+  {
+    _id: '3',
+    name: '3',
+  },
+  {
+    _id: '4',
+    name: '4',
+  },
+  {
+    _id: '5',
+    name: '5',
+  },
+  {
+    _id: '6+',
+    name: '6+',
+  },
+];
+export const bathroomFilters = [
+  {
+    _id: 'all',
+    name: 'All',
+  },
+  {
+    _id: '1',
+    name: '1',
+  },
+  {
+    _id: '2',
+    name: '2',
+  },
+  {
+    _id: '3',
+    name: '3',
+  },
+  {
+    _id: '4',
+    name: '4',
+  },
+  {
+    _id: '5',
+    name: '5',
+  },
+  {
+    _id: '6+',
+    name: '6+',
+  },
+];
+export const statusOptions = [
+  { _id: 'available', name: 'available' },
+  { _id: 'unavailable', name: 'unavailable' },
+];
 
 export const counties = [
   { _id: 'Mombasa', name: 'Mombasa' },

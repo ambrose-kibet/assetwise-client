@@ -5,7 +5,7 @@ import validator from 'validator';
 import { toast } from 'react-toastify';
 import {
   handleChange,
-  resetForm,
+  sendEmail,
 } from '../redux/features/contact/contactSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -26,27 +26,20 @@ const ContactForm = () => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email || !name || !subject || !message) {
+    if (!email.trim() || !name.trim() || !subject.trim() || !message.trim()) {
       return toast.error('Please provide email, name, subject and message');
     }
     if (!validator.isEmail(email)) {
       return toast.error('Please provide a valid email');
     }
-    try {
-      const response = await fetch('/.netlify/functions/sendMail', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, subject, message }),
-      });
-      const data = await response.json();
-
-      console.log(data);
-      toast.success('Message Sent Succesfully');
-      resetForm();
-    } catch (error) {
-      console.log(error);
-      toast.error('Could not send message');
+    if (subject.length < 5) {
+      return toast.error('Subject must be at least 5 characters long');
     }
+    if (message.length < 10) {
+      return toast.error('Message must be at least 10 characters long');
+    }
+
+    dispatch(sendEmail({ email, name, subject, message }));
   };
   return (
     <form className="contact-form" onSubmit={handleSubmit}>

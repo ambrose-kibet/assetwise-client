@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 export type altImage = {
   _id: string;
   url: string;
+  public_id: string;
 }[];
 export type TProperty = {
   [key: string]: string | number | boolean | string[] | undefined | altImage;
@@ -31,6 +32,20 @@ export type TProperty = {
   updatedAt?: string;
 };
 
+type Tfilters = {
+  [key: string]: string | number | boolean | string[] | undefined;
+  page: number;
+  limit: number;
+  adress?: string;
+  county: string;
+  type: string;
+  category: string;
+  bedrooms: string;
+  bathrooms: string;
+  price: number;
+  acreage: number;
+};
+
 type PropertyState = {
   isLoading: boolean;
   properties: Partial<TProperty>[];
@@ -38,12 +53,34 @@ type PropertyState = {
   property: TProperty;
   isEditing: boolean;
   selectedProperty: TProperty | null;
+  filters: Tfilters;
+  minAcreage: number;
+  maxAcreage: number;
+  minPrice: number;
+  maxPrice: number;
+  pages: number;
+  flagId: string;
+  imageFlagId: string;
+};
+const filters: Tfilters = {
+  page: 1,
+  limit: 9,
+  county: 'all',
+  type: 'all',
+  category: 'all',
+  bedrooms: 'all',
+  bathrooms: 'all',
+  adress: '',
+  price: 0,
+  acreage: 0,
 };
 
 const initialState: PropertyState = {
   isLoading: false,
   properties: [],
   featuredProperties: [],
+  flagId: '',
+  imageFlagId: '',
   property: {
     title: '',
     county: 'Mombasa',
@@ -56,13 +93,19 @@ const initialState: PropertyState = {
     description: '',
     area: undefined,
     bedrooms: undefined,
-    status: '',
+    status: 'available',
     bathrooms: undefined,
     acreage: undefined,
     amenity: '',
     amenities: [],
     images: [],
   },
+  minAcreage: 0,
+  maxAcreage: 0,
+  minPrice: 0,
+  maxPrice: 0,
+  pages: 1,
+  filters,
   isEditing: false,
   selectedProperty: null,
 };
@@ -173,9 +216,9 @@ export const getFeaturedProperties = createAsyncThunk(
 );
 export const getAllProperties = createAsyncThunk(
   'property/getAllProperties',
-  async (_, { rejectWithValue, dispatch }) => {
+  async (filterUrl: string, { rejectWithValue, dispatch }) => {
     try {
-      const { data } = await customAxios.get('/properties');
+      const { data } = await customAxios.get('/properties' + filterUrl);
       return data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -221,6 +264,118 @@ export const getSingeProperty = createAsyncThunk(
     }
   }
 );
+export const deleteProperty = createAsyncThunk(
+  'property/deleteProperty',
+  async (id: string, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await customAxios.delete(`/properties/${id}`);
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ msg: string }, unknown>;
+        if (axiosError.response) {
+          if (axiosError.response.status === 401) {
+            dispatch(logoutUser());
+            return rejectWithValue('Unauthorized Logging you out...');
+          }
+          return rejectWithValue(axiosError.response.data.msg);
+        } else if (axiosError.request) {
+          return rejectWithValue('No response received');
+        } else {
+          return rejectWithValue('Network error');
+        }
+      }
+      return rejectWithValue('Something went wrong');
+    }
+  }
+);
+export const deleteImage = createAsyncThunk(
+  'property/deleteImage',
+  async (id: string, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await customAxios.delete(`/images/${id}`);
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ msg: string }, unknown>;
+        if (axiosError.response) {
+          if (axiosError.response.status === 401) {
+            dispatch(logoutUser());
+            return rejectWithValue('Unauthorized Logging you out...');
+          }
+          return rejectWithValue(axiosError.response.data.msg);
+        } else if (axiosError.request) {
+          return rejectWithValue('No response received');
+        } else {
+          return rejectWithValue('Network error');
+        }
+      }
+      return rejectWithValue('Something went wrong');
+    }
+  }
+);
+export const addImages = createAsyncThunk(
+  'property/addImages',
+  async (
+    { images, propertyId }: { images: File[]; propertyId: string },
+    { rejectWithValue, dispatch }
+  ) => {
+    try {
+      const formData = new FormData();
+      images.forEach((image) => formData.append('images', image));
+      const { data } = await customAxios.post(
+        `/images/property/${propertyId}`,
+        formData
+      );
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ msg: string }, unknown>;
+        if (axiosError.response) {
+          if (axiosError.response.status === 401) {
+            dispatch(logoutUser());
+            return rejectWithValue('Unauthorized');
+          }
+          return rejectWithValue(axiosError.response.data.msg);
+        } else if (axiosError.request) {
+          return rejectWithValue('No response received');
+        }
+      }
+      return rejectWithValue('Something went wrong');
+    }
+  }
+);
+export const editproperty = createAsyncThunk(
+  'property/editProperty',
+  async (
+    { property, propertyId }: { property: TProperty; propertyId: string },
+    { rejectWithValue, dispatch }
+  ) => {
+    try {
+      const { data } = await customAxios.patch(
+        `/properties/${propertyId}`,
+        property
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ msg: string }, unknown>;
+        console.log(axiosError);
+        if (axiosError.response) {
+          if (axiosError.response.status === 401) {
+            dispatch(logoutUser());
+            return rejectWithValue('Unauthorized');
+          }
+          return rejectWithValue(axiosError.response.data.msg);
+        } else if (axiosError.request) {
+          return rejectWithValue('No response received');
+        }
+      }
+      return rejectWithValue('Something went wrong');
+    }
+  }
+);
 const propertySlice = createSlice({
   name: 'property',
   initialState,
@@ -240,6 +395,21 @@ const propertySlice = createSlice({
     clearProperty: (state) => {
       state.property = initialState.property;
     },
+    clearFilters: (state) => {
+      state.filters = initialState.filters;
+    },
+    setFilters: (state, { payload: { name, value } }) => {
+      state.filters[name as keyof Tfilters] = value;
+    },
+    setFlagId: (state, { payload }: PayloadAction<string>) => {
+      state.flagId = payload;
+    },
+    setEditing: (state, { payload }) => {
+      state.isEditing = payload;
+    },
+    setImagesFlagId: (state, { payload }: PayloadAction<string>) => {
+      state.imageFlagId = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -249,7 +419,6 @@ const propertySlice = createSlice({
       .addCase(uploadImages.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.property.images = payload.urls;
-        console.log(state.property.images);
         toast.success('Images uploaded successfully', {
           position: 'top-center',
         });
@@ -314,6 +483,10 @@ const propertySlice = createSlice({
       .addCase(getAllProperties.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.properties = payload.data;
+        state.maxAcreage = payload.maxAcreage;
+        state.minPrice = payload.minPrice;
+        state.maxPrice = payload.maxPrice;
+        state.pages = payload.numberOfPages;
       })
       .addCase(getAllProperties.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -327,6 +500,8 @@ const propertySlice = createSlice({
       })
       .addCase(getSingeProperty.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        if (state.isEditing)
+          state.property = { ...state.property, ...payload.data };
         state.selectedProperty = payload.data;
       })
       .addCase(getSingeProperty.rejected, (state, { payload }) => {
@@ -335,10 +510,98 @@ const propertySlice = createSlice({
           position: 'top-center',
         });
       });
+    builder
+      .addCase(deleteProperty.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProperty.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.properties = state.properties.filter(
+          (property) => property._id !== payload.data._id
+        );
+        toast.success('Property deleted successfully', {
+          position: 'top-center',
+        });
+      })
+      .addCase(deleteProperty.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload as string, {
+          position: 'top-center',
+        });
+      });
+    builder
+      .addCase(deleteImage.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteImage.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.property.images! = (state.property.images as altImage).filter(
+          (image) => image._id !== payload.data._id
+        );
+        toast.success('Image deleted successfully', {
+          position: 'top-center',
+        });
+      })
+      .addCase(deleteImage.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload as string, {
+          position: 'top-center',
+        });
+      });
+    builder
+      .addCase(addImages.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addImages.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.property.images = [
+          ...(state.property.images as altImage),
+          ...payload.data,
+        ];
+        toast.success('Images added successfully', {
+          position: 'top-center',
+        });
+      })
+      .addCase(addImages.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload as string, {
+          position: 'top-center',
+        });
+      });
+    builder
+      .addCase(editproperty.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editproperty.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.property = initialState.property;
+        state.properties = state.properties.map((property) =>
+          property._id === payload.data._id ? payload.data : property
+        );
+        state.isEditing = false;
+        toast.success('Property edited successfully', {
+          position: 'top-center',
+        });
+      })
+      .addCase(editproperty.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload as string, {
+          position: 'top-center',
+        });
+      });
   },
 });
 
-export const { handleInput, removeAmenity, setPropertyEditing, clearProperty } =
-  propertySlice.actions;
+export const {
+  handleInput,
+  removeAmenity,
+  setPropertyEditing,
+  clearProperty,
+  clearFilters,
+  setFilters,
+  setFlagId,
+  setEditing,
+  setImagesFlagId,
+} = propertySlice.actions;
 
 export default propertySlice.reducer;

@@ -14,7 +14,13 @@ import MyBlogs from './myblogs';
 import Properties from './properties';
 import Sharedlayout from './sharedlayout';
 import AddProperty from './AddProperty';
+import ProfilePage from './myAccount';
+import UserLayout from './UserLayout';
+import AdminProtectedPages from './adminProtectedPages';
 export {
+  AdminProtectedPages,
+  UserLayout,
+  ProfilePage,
   AddProperty,
   MyBlogs,
   ProtectedPages,
