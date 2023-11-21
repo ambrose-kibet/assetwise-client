@@ -10,7 +10,7 @@ type Props = {
 const RichTextEditor = ({ content, handleChanges }: Props) => {
   const quillRef = useRef();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const imageHandler = (e: unknown) => {
+  const imageHandler = () => {
     if (quillRef.current) {
       const editor = (quillRef.current as ReactQuill).getEditor();
       const input = document.createElement('input');
