@@ -21,10 +21,10 @@ const Popular = ({ posts }: { posts: DBPost[] }) => {
       <div className="popular-stories">
         {(!showAll &&
           posts
-            .slice(4, 7)
+            .slice(3, 6)
             .map((post) => <SingleStory key={post._id} {...post} />)) ||
           posts
-            .slice(4)
+            .slice(3)
             .map((post) => <SingleStory key={post._id} {...post} />)}
       </div>
     </PopularContainer>
