@@ -117,6 +117,7 @@ const FeaturedContainer = styled.article`
     img {
       width: 100%;
       height: 100%;
+      max-height: 500px;
       object-fit: cover;
       border-radius: var(--radius);
       margin: 0 auto;
@@ -138,7 +139,7 @@ const FeaturedContainer = styled.article`
     .items-container {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: space-evenly;
       width: 100%;
     }
     p {
