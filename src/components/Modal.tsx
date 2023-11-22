@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useAppDispatch } from '../redux/hooks';
-import { closeModal } from '../redux/features/nav/navSlice';
+import { closeModal, setModalInfo } from '../redux/features/nav/navSlice';
 import { Action } from '@reduxjs/toolkit';
 type ModalProps = {
   info: string;
@@ -12,6 +12,7 @@ const Modal = ({ info, action, _id }: ModalProps) => {
 
   const handleDelete = () => {
     dispatch(action(_id) as unknown as Action);
+    dispatch(setModalInfo(''));
     dispatch(closeModal());
   };
 
@@ -22,7 +23,13 @@ const Modal = ({ info, action, _id }: ModalProps) => {
         <p>{info}</p>
         <h5> Bad things will happen!</h5>
         <div className="button-container">
-          <button type="button" onClick={() => dispatch(closeModal())}>
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(setModalInfo(''));
+              dispatch(closeModal());
+            }}
+          >
             Cancel
           </button>
           <button type="button" onClick={handleDelete}>
