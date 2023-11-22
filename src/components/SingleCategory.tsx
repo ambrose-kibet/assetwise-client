@@ -9,7 +9,7 @@ import {
   setFlagId,
   setIsEditing,
 } from '../redux/features/blog/categorySlice';
-import { openModal } from '../redux/features/nav/navSlice';
+import { openModal, setModalInfo } from '../redux/features/nav/navSlice';
 import styled from 'styled-components';
 const SingleCategory = ({ _id, name }: SingleCategoryProps) => {
   const dispatch = useAppDispatch();
@@ -20,6 +20,7 @@ const SingleCategory = ({ _id, name }: SingleCategoryProps) => {
   };
   const handleDelete = () => {
     dispatch(setFlagId(_id));
+    dispatch(setModalInfo('category'));
     dispatch(openModal());
   };
   return (
