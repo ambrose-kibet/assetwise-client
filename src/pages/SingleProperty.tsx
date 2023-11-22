@@ -98,30 +98,34 @@ const SingleProperty = () => {
               </div>
               <div className="additional">
                 <h4>Additional information</h4>
-                {selectedProperty.acreage && (
+                {(selectedProperty.acreage && (
                   <div className="info-detail">
                     <p>Acreage</p>
                     <span>{selectedProperty.acreage} (acres) </span>
                   </div>
-                )}
-                {selectedProperty.area && (
+                )) ||
+                  null}
+                {(selectedProperty.area && (
                   <div className="info-detail">
                     <p>Area</p>
                     <span>{selectedProperty.area} (squared meters)</span>
                   </div>
-                )}
-                {selectedProperty.bedrooms && (
+                )) ||
+                  null}
+                {(selectedProperty.bedrooms && (
                   <div className="info-detail">
                     <p>Bedrooms</p>
                     <span>{selectedProperty.bedrooms}</span>
                   </div>
-                )}
-                {selectedProperty.bathrooms && (
+                )) ||
+                  null}
+                {(selectedProperty.bathrooms && (
                   <div className="info-detail">
                     <p>Bathrooms</p>
                     <span>{selectedProperty.bathrooms}</span>
                   </div>
-                )}
+                )) ||
+                  null}
                 <div className="info-detail">
                   <p>Amenities</p>
                   {selectedProperty.amenities?.map((amenity, index) => (
@@ -129,7 +133,7 @@ const SingleProperty = () => {
                       {amenity}
                       {index !== selectedProperty.amenities!.length - 1 && ','}
                     </span>
-                  ))}
+                  )) || null}
                 </div>
               </div>
             </div>
