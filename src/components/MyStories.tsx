@@ -18,7 +18,9 @@ const MyStories = () => {
     isLoading,
     flagId,
   } = useAppSelector((state: RootState) => state.blog);
-  const { isModalOpen } = useAppSelector((state: RootState) => state.nav);
+  const { isModalOpen, modalInfo } = useAppSelector(
+    (state: RootState) => state.nav
+  );
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getMyPosts({ page: currentPage, status }));
@@ -26,7 +28,7 @@ const MyStories = () => {
 
   return (
     <MyStoriesContainer>
-      {isModalOpen && (
+      {isModalOpen && modalInfo === 'blog' && (
         <Modal
           _id={flagId}
           action={deleteBlog}

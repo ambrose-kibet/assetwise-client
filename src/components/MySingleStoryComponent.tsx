@@ -5,7 +5,7 @@ import { FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { setFlagId, setIsEditing } from '../redux/features/blog/blogSlice';
 import { useAppDispatch } from '../redux/hooks';
-import { openModal } from '../redux/features/nav/navSlice';
+import { openModal, setModalInfo } from '../redux/features/nav/navSlice';
 type Props = {
   _id: string;
   coverImage: string;
@@ -37,6 +37,7 @@ const MySingleStoryComponent = ({ _id, coverImage, title }: Props) => {
             type="button"
             onClick={() => {
               dispatch(openModal());
+              dispatch(setModalInfo('blog'));
               dispatch(setFlagId(_id));
             }}
           >
