@@ -19,7 +19,9 @@ const Categories = () => {
   const { localCategory, flagId, categories, isEditing } = useAppSelector(
     (state: RootState) => state.category
   );
-  const { isModalOpen } = useAppSelector((state: RootState) => state.nav);
+  const { isModalOpen, modalInfo } = useAppSelector(
+    (state: RootState) => state.nav
+  );
   const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(handleInputChange(e.target.value));
   };
@@ -38,7 +40,7 @@ const Categories = () => {
   }, [dispatch]);
   return (
     <CategoriesContainer>
-      {isModalOpen && (
+      {isModalOpen && modalInfo === 'category' && (
         <Modal
           _id={flagId}
           action={deleteCategory}
