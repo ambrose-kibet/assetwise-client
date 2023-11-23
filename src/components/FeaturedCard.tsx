@@ -103,7 +103,6 @@ const FeaturedContainer = styled.article`
   grid-template-columns: 1fr;
   padding: 0.25rem;
   width: 100%;
-
   padding: 1rem;
   background-color: var(--clr-white);
   border-radius: var(--radius);
@@ -114,10 +113,11 @@ const FeaturedContainer = styled.article`
     box-shadow: var(--shadow-3);
   }
   .card-image {
+    width: 100%;
     img {
       width: 100%;
       height: 100%;
-      max-height: 500px;
+
       object-fit: cover;
       border-radius: var(--radius);
       margin: 0 auto;
@@ -182,6 +182,7 @@ const FeaturedContainer = styled.article`
     gap: 1rem;
     padding-bottom: 2rem;
     padding-top: 2rem;
+
     .card-content {
       display: flex;
       flex-direction: column;
