@@ -99,7 +99,8 @@ const SingleStoryContainer = styled.article`
     h3 {
       color: var(--clr-white);
       margin-bottom: 0.5rem;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
+      text-transform: capitalize;
     }
     .info-container {
       display: flex;
@@ -150,7 +151,7 @@ const SingleStoryContainer = styled.article`
         }
       }
       h3 {
-        font-size: 2rem;
+        font-size: 1.5rem;
       }
     }
   }
