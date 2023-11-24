@@ -332,6 +332,7 @@ const blogSlice = createSlice({
         state.isLoading = false;
         state.isEditing = false;
         state.blogContent = blogContent;
+
         toast.success('Post updated sucessfully', { position: 'top-center' });
       })
       .addCase(updateBlog.rejected, (state, { payload }) => {
