@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 import { BiImageAdd } from 'react-icons/bi';
-import { FaPen, FaPlus } from 'react-icons/fa';
-
+import { FaPen, FaPlus, FaTimes } from 'react-icons/fa';
 import { FaFeatherAlt } from 'react-icons/fa';
 import FormTextArea from '../components/FormTextArea';
 import FormInputComponent from '../components/FormInputComponent';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
+  addTag,
   createBlog,
   getSingleBlog,
   handleChange,
+  removeTag,
   setIsEditing,
   updateBlog,
   uploadImage,
@@ -37,6 +38,7 @@ const WriteBlog = () => {
       coverImage,
       description,
       status,
+      tag,
       tags,
       title,
       featured,
@@ -44,6 +46,8 @@ const WriteBlog = () => {
     isEditing,
     isLoading,
   } = useAppSelector((state: RootState) => state.blog);
+  //
+
   const { categories } = useAppSelector((state: RootState) => state.category);
   const handleChanges = (
     event:
@@ -99,50 +103,52 @@ const WriteBlog = () => {
       !coverImage
     ) {
       return toast.error('Please fill all the fields');
-    } else if (title.length < 6) {
-      return toast.error('Title must be at least 6 characters long.');
-    } else if (description.length < 30) {
-      return toast.error('Description must be at least 30 characters long.');
-    } else if (content.length < 10) {
-      return toast.error('Content must be at least 10 characters long.');
-    } else if (tags.length < 3) {
-      return toast.error('Tags must be at least 3 characters long.');
-    } else if (!tags.startsWith('#')) {
-      return toast.error(
-        'Tags must  start with # and separated by a space and preceded by #.'
-      );
-    } else {
-      if (isEditing) {
-        console.log(tags);
-
-        dispatch(
-          updateBlog({
-            _id: editId || '',
-            title,
-            description,
-            content,
-            tags,
-            category,
-            status,
-            coverImage,
-            featured,
-          })
-        );
-      } else {
-        dispatch(
-          createBlog({
-            title,
-            description,
-            content,
-            tags,
-            category,
-            status,
-            coverImage,
-            featured,
-          })
-        );
-      }
     }
+    if (title.length < 6) {
+      return toast.error('Title must be at least 6 characters long.');
+    }
+    if (description.length < 30) {
+      return toast.error('Description must be at least 30 characters long.');
+    }
+    if (content.length < 10) {
+      return toast.error('Content must be at least 10 characters long.');
+    }
+    if (tags.length < 1) {
+      return toast.error('Add at least one tag.');
+    }
+
+    if (isEditing) {
+      dispatch(
+        updateBlog({
+          _id: editId || '',
+          title,
+          description,
+          content,
+          tags,
+          category,
+          status,
+          coverImage,
+          featured,
+        })
+      );
+      return;
+    }
+    dispatch(
+      createBlog({
+        title,
+        description,
+        content,
+        tags,
+        category,
+        status,
+        coverImage,
+        featured,
+      })
+    );
+  };
+  const addTags = () => {
+    if (!tag?.trim()) return toast.error(' cannot add null values');
+    dispatch(addTag(tag));
   };
   useEffect(() => {
     if (editId) {
@@ -219,15 +225,38 @@ const WriteBlog = () => {
                 handleChange={handleChanges}
               />
             </div>
-            <div className="form-group">
+            <div className="group-two">
               <label htmlFor="title">Tags</label>
-              <FormInputComponent
-                type="text"
-                placeholder="#rent"
-                name="tags"
-                value={tags}
-                handleChange={handleChanges}
-              />
+              <div className="group-this">
+                <FormInputComponent
+                  name="tag"
+                  handleChange={handleChanges}
+                  placeholder="Add tag eg. rent"
+                  type="text"
+                  value={tag! || ''}
+                />
+                <button type="button" className="button" onClick={addTags}>
+                  add tag
+                  <span className="button-icon">
+                    <FaPlus />
+                  </span>
+                </button>
+              </div>
+              <div className="amenities">
+                {(tags.length &&
+                  tags!.map((tag, index) => (
+                    <span key={index} className="amenity">
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => dispatch(removeTag(tag))}
+                      >
+                        <FaTimes />
+                      </button>
+                    </span>
+                  ))) ||
+                  null}
+              </div>
             </div>
             <div className="form-group">
               <label htmlFor="title">Status</label>
@@ -250,7 +279,7 @@ const WriteBlog = () => {
             />
             <div className="form-group">
               <button className="button" type="submit">
-                {isEditing ? 'Edit' : ' Publish '}Story
+                {isEditing ? 'Edit' : ' Publish '} Story
                 <span className="button-icon ">
                   {isEditing ? <FaPen /> : <FaFeatherAlt />}
                 </span>
@@ -310,6 +339,41 @@ const WriteBlogContainer = styled.div`
         .quill {
           .ql-editor {
             min-height: 150px;
+          }
+        }
+      }
+      .group-two {
+        display: grid;
+        .group-this {
+          display: flex;
+          align-items: center;
+          input {
+            border-bottom: none;
+            margin-top: 1rem;
+          }
+        }
+        .amenities {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          .amenity {
+            display: flex;
+            align-items: center;
+            background: var(--color-white);
+            padding: 0.5rem 1rem;
+            border-radius: 2.5rem;
+            box-shadow: var(--shadow-3);
+            button {
+              background: transparent;
+              border: none;
+              outline: none;
+              margin-left: 0.5rem;
+              font-size: 1.2rem;
+              cursor: pointer;
+              svg {
+                color: red;
+              }
+            }
           }
         }
       }
