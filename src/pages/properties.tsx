@@ -7,12 +7,14 @@ import {
   deleteProperty,
   setFilters,
 } from '../redux/features/property/propertySlice';
-
+import { FaFilter } from 'react-icons/fa';
+import { MdFilterAltOff } from 'react-icons/md';
 import FiltersComponet from '../components/FiltersComponet';
 import PropertiesComponent from '../components/PropertiesComponent';
 import Pagination from '../components/Pagination';
 import { RootState } from '../redux/store';
 import Modal from '../components/Modal';
+import { setShowFilters } from '../redux/features/nav/navSlice';
 const Properties = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
@@ -22,7 +24,9 @@ const Properties = () => {
     pages,
     flagId,
   } = useAppSelector((state: RootState) => state.property);
-  const { isModalOpen } = useAppSelector((state: RootState) => state.nav);
+  const { isModalOpen, showFilters } = useAppSelector(
+    (state: RootState) => state.nav
+  );
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(clearFilters());
@@ -51,7 +55,14 @@ const Properties = () => {
         <h2 className="section-title">
           Our <span>Properties</span>
         </h2>
-        <FiltersComponet />
+        <button
+          type="button"
+          className="filterbtn"
+          onClick={() => dispatch(setShowFilters())}
+        >
+          {(showFilters && <MdFilterAltOff />) || <FaFilter />}
+        </button>
+        {(showFilters && <FiltersComponet />) || null}
         <PropertiesComponent />
         {pages > 1 && <Pagination page={page} pages={pages} />}
       </div>
@@ -64,6 +75,20 @@ const PropertyCardContainer = styled.section`
   .container {
     min-height: 58vh;
     padding: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    .filterbtn {
+      position: absolute;
+      top: 2.5rem;
+      right: 0;
+      margin: 0.5rem;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      margin-left: auto;
+      color: var(--orange);
+      background: transparent;
+      cursor: pointer;
+    }
   }
   .properties {
     display: grid;
