@@ -61,10 +61,18 @@ const PropertiesComponent = () => {
   ]);
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="properties">
+        <Loading />
+      </div>
+    );
   }
   if (properties.length === 0) {
-    return <h4>No properties Match Your Criteria</h4>;
+    return (
+      <div className="properties">
+        <h4>No properties Match Your Criteria</h4>
+      </div>
+    );
   }
   return (
     <div className="properties">
