@@ -88,11 +88,11 @@ const FeaturedContainer = styled.div`
     }
   }
   .slick-prev {
-    left: -0.5rem;
+    left: 0.5rem;
     z-index: 1;
   }
   .slick-next {
-    right: -0.5rem;
+    right: 0.5rem;
     z-index: 1;
   }
   .slick-prev:before {
