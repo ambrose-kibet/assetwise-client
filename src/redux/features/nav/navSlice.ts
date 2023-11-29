@@ -7,6 +7,7 @@ const initialState = {
   isSidebarOpen: false,
   isModalOpen: false,
   modalInfo: '',
+  showFilters: false,
 };
 
 const navSlice = createSlice({
@@ -41,6 +42,9 @@ const navSlice = createSlice({
     setModalInfo: (state, { payload }: PayloadAction<string>) => {
       state.modalInfo = payload;
     },
+    setShowFilters: (state) => {
+      state.showFilters = !state.showFilters;
+    },
   },
 });
 
@@ -52,5 +56,6 @@ export const {
   openModal,
   closeModal,
   setModalInfo,
+  setShowFilters,
 } = navSlice.actions;
 export default navSlice.reducer;
