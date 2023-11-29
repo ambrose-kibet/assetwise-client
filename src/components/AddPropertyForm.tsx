@@ -339,7 +339,7 @@ const AddPropertyForm = () => {
             handleChange={handleChange}
             placeholder="Add amenity"
             type="text"
-            value={amenity!}
+            value={amenity! || ''}
           />
           <button type="button" className="button" onClick={handleAddAmenity}>
             add
