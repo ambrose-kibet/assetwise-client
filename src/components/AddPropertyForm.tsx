@@ -228,7 +228,7 @@ const AddPropertyForm = () => {
             <SelectComponent
               name="status"
               options={statusOptions}
-              value={status!}
+              value={status! || 'available'}
               handleChange={handleChange}
             />
           </div>
@@ -286,7 +286,7 @@ const AddPropertyForm = () => {
             <InputComponent
               name="bedrooms"
               type="number"
-              value={bedrooms!}
+              value={bedrooms! || 0}
               placeholder="Enter no of bedrooms"
               handleChange={handleChange}
             />
@@ -298,7 +298,7 @@ const AddPropertyForm = () => {
             <InputComponent
               name="bathrooms"
               type="number"
-              value={bathrooms!}
+              value={bathrooms! || 0}
               placeholder="Enter no of bathrooms"
               handleChange={handleChange}
             />
@@ -312,7 +312,7 @@ const AddPropertyForm = () => {
             <InputComponent
               name="area"
               type="number"
-              value={area!}
+              value={area! || 0}
               placeholder="size in sqauare meters"
               handleChange={handleChange}
             />
@@ -324,7 +324,7 @@ const AddPropertyForm = () => {
             <InputComponent
               name="acreage"
               type="number"
-              value={acreage!}
+              value={acreage! || 0}
               placeholder="size in sqauare meters"
               handleChange={handleChange}
             />
