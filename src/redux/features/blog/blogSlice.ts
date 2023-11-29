@@ -15,7 +15,8 @@ export type BlogContent = {
   title: string;
   description: string;
   content: string;
-  tags: string;
+  tag?: string;
+  tags: string[];
   category: string;
   status: string;
   date?: string;
@@ -67,7 +68,8 @@ const blogContent = {
   title: '',
   description: '',
   content: '',
-  tags: '',
+  tag: '',
+  tags: [],
   category: '',
   status: 'draft',
   date: '',
@@ -229,6 +231,15 @@ const blogSlice = createSlice({
     resetBlogContent(state) {
       state.blogContent = blogContent;
     },
+    addTag(state, { payload }: PayloadAction<string>) {
+      state.blogContent.tags = [...state.blogContent.tags, payload];
+      state.blogContent.tag = '';
+    },
+    removeTag(state, { payload }: PayloadAction<string>) {
+      state.blogContent.tags = state.blogContent.tags.filter(
+        (tag: string) => tag !== payload
+      );
+    },
     updateFilters(
       state,
       {
@@ -287,7 +298,6 @@ const blogSlice = createSlice({
         state.post = {
           ...state.post,
           ...payload.data,
-          tags: payload.data.tags.join(','),
         };
 
         if (state.isEditing) state.blogContent = payload.data;
@@ -362,6 +372,8 @@ export const {
   handleChange,
   updateFilters,
   setFlagId,
+  addTag,
+  removeTag,
 } = blogSlice.actions;
 
 export default blogSlice.reducer;
