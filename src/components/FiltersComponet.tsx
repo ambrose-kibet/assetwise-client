@@ -139,6 +139,8 @@ export default FiltersComponet;
 
 const FiltersComponetContainer = styled.div`
   display: grid;
+  width: 100%;
+
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 0.25rem;
   background: var(--clr-white);
