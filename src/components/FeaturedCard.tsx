@@ -114,6 +114,7 @@ const FeaturedContainer = styled.article`
   }
   .card-image {
     width: 100%;
+    max-height: 450px;
     img {
       width: 100%;
       height: 100%;
