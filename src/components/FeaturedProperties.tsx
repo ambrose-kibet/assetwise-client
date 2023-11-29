@@ -43,6 +43,7 @@ export default FeaturedProperties;
 const FeaturedContainer = styled.div`
   position: relative;
   min-width: 100%;
+  box-shadow: none !important;
 
   .slick-list {
     overflow: hidden;
@@ -100,9 +101,5 @@ const FeaturedContainer = styled.div`
   }
   .slick-next:before {
     color: var(--orange);
-  }
-  .slick-prev:before,
-  .slick-next:before {
-    font-size: 1.5rem;
   }
 `;

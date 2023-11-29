@@ -371,8 +371,6 @@ const AddPropertyForm = () => {
       )) || (
         <div className="form-group">
           <label htmlFor="title">Images</label>
-          {/* incase of editing  hide this then display a different one for
-         displaying all images for that property and option to add more */}
           <input
             type="file"
             placeholder="Please provide at least 3 images of the property"
